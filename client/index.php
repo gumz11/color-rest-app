@@ -9,42 +9,42 @@ Main index page
 
 require_once 'colorrequest.php';
 
-if(isset($_GET) && isset($_GET['id']) && isset($_GET['color'])) {
-
-	$id = $_GET['id'];
-	$color = $_GET['color'];
-
-	$colorRequest = new ColorRequest('PUT', '/colors/' . $id . '/' . $color);
-	$response = $colorRequest->request();
-
-	if (!isset($response->error)) {
-
-		header('Refresh: 0; url=index.php');
-
-	} else {
-		
-		exit($response->message);
-
-	}
+if (isset($_GET) && isset($_GET['id']) && isset($_GET['color'])) {
+    
+    $id    = $_GET['id'];
+    $color = $_GET['color'];
+    
+    $colorRequest = new ColorRequest('PUT', '/colors/' . $id . '/' . $color);
+    $response     = $colorRequest->request();
+    
+    if (!isset($response->error)) {
+        
+        header('Refresh: 0; url=index.php');
+        
+    } else {
+        
+        exit($response->message);
+        
+    }
 }
 
 $colorOptions = ['red', 'green', 'blue'];
 
 $colorRequest = new ColorRequest('GET', '/colors/');
-$colors = $colorRequest->request();
+$colors       = $colorRequest->request();
 
-if(!isset($colors->error)) {
-	
-	foreach($colors as $color) {
-
-		$colorGroups[$color->color][] = $color;
-	}
+if (!isset($colors->error)) {
+    
+    foreach ($colors as $color) {
+        
+        $colorGroups[$color->color][] = $color;
+    }
+} else {
+    
+    exit($colors->message);
+    
 }
-else {
-
-	exit( $colors->message );
-
-} ?>
+?>
 
 <html>
 
