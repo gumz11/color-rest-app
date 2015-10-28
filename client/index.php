@@ -9,10 +9,26 @@ Main index page
 
 require_once 'colorrequest.php';
 
-if(isset($_POST)) {
+if(isset($_GET) && isset($_GET['id']) && isset($_GET['color'])) {
 
-	//handle: PUT /colors/{id}/{color}
+	$id = $_GET['id'];
+	$color = $_GET['color'];
+
+	$colorRequest = new ColorRequest('PUT', '/colors/' . $id . '/' . $color);
+	$response = $colorRequest->request();
+
+	if (!isset($response->error)) {
+
+		header('Refresh: 0; url=index.php');
+
+	} else {
+		
+		exit($reponse->error);
+
+	}
 }
+
+$colorOptions = ['red', 'green', 'blue'];
 
 $colorRequest = new ColorRequest('GET', '/colors/');
 $colors = $colorRequest->request();
@@ -26,7 +42,7 @@ if(!isset($colors->error)) {
 }
 else {
 
-	print $colors->error;
+	exit( $colors->error );
 
 } ?>
 
@@ -67,6 +83,14 @@ else {
 		color: white;
 	}
 
+	a.color {
+		padding: 10px 20px;
+		color: white;
+		text-decoration: none;
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+
 </style>
 </head>
 
@@ -86,7 +110,7 @@ else {
 			 	
 			 	foreach($colorGroups[$option] as $color) {
 
-					displayModal($color, $colorGroups); ?>
+					displayModal($color, $colorOptions); ?>
 
 					<div style="background-color:<?php echo $color->color; ?>" 
 							class="color col-xs-2" data-toggle="modal" 
@@ -126,9 +150,13 @@ function displayModal($color, $groups) { ?>
 					
 					<?php
 					
-					foreach(array_keys($groups) as $option) { ?>
+					foreach($groups as $option) { 
 
-						<div style="background-color:<?php echo $option; ?>" class="color col-sm-offset-5 col-sm-2 col-xs-offset-5 col-xs-2"></div>
+						$href = 'index.php?id='.$color->id.'&color='.$option; ?>
+
+						<a style="background-color:<?php echo $option; ?>" 
+							class="color col-sm-offset-5 col-sm-2 col-xs-offset-2 col-xs-8"
+							href="<?php echo $href; ?>"> <?php echo $color->id; ?> </a>
 					
 					<?php 
 					} ?>

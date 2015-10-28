@@ -7,7 +7,7 @@ Color REST API service
 
 */
 
-$service = new ColorService();
+new ColorService();
 
 class ColorService {
 
@@ -94,7 +94,7 @@ class ColorService {
 		else {
 
 			header('HTTP/1.1 404');
-			$json = array('error'=>'404');
+			$json = array('error'=>'404', 'message'=> $values);
 
 		}
 
@@ -105,6 +105,25 @@ class ColorService {
 	// PUT /colors/{id}/{color}
 	private function putColor($id, $color) {
 		
+		try {
+
+			$prepare = $this->database->prepare('UPDATE colors SET color = ? where id = ?');
+			$result = $prepare->execute(array($color, $id));
+
+			if ($result) {
+
+				return $this->response(1, array('success'=>$id));
+			}
+
+		}
+		catch (PDOException $e) {
+
+			return $this->response(0, $e);
+
+		}
+
+		return $this->response(0);
+
 	}
 
 	// GET /colors/
@@ -130,7 +149,7 @@ class ColorService {
 		}
 		catch(PDOException $e) {
 
-			return $this->response(0);
+			return $this->response(0, $e);
 
 		}	
 
