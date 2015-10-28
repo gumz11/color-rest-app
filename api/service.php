@@ -10,10 +10,12 @@ new ColorService();
 
 class ColorService
 {
+    //ADJUST CONNECTION INFO FOR TESTING
     const DB_HOST = 'localhost';
     const DB_NAME = 'color_rest_app';
     const DB_USER = 'root';
     const DB_PASS = '';
+
     private $database;
 
     public function __construct()

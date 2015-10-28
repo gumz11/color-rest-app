@@ -10,7 +10,7 @@ Color API wrapper
 class ColorRequest
 {
     
-    const API_URL = 'http://localhost/colorapp/api';
+    const API_URL = 'http://localhost/colorapp/api'; //ADJUST URL FOR TESTING
     
     private $method;
     private $uri;
