@@ -23,7 +23,7 @@ if(isset($_GET) && isset($_GET['id']) && isset($_GET['color'])) {
 
 	} else {
 		
-		exit($reponse->error);
+		exit($response->message);
 
 	}
 }
@@ -42,7 +42,7 @@ if(!isset($colors->error)) {
 }
 else {
 
-	exit( $colors->error );
+	exit( $colors->message );
 
 } ?>
 

@@ -38,7 +38,8 @@ class ColorService {
 		}
 		catch(PDOException $e) {
 
-			exit("Unable to open database: " . $e->getMessage());
+			$this->response(0, "Unable to open database: " . $e->getMessage());
+			exit();
 		}
 	}
 
@@ -71,14 +72,14 @@ class ColorService {
 					default:
 
 						header('HTTP/1.1 405 Method Not Allowed');
-						header('Allow: GET, PUT');
+						$this->response(0, 'Method not allowed.');
 						break;
 				}
 				break;
 
 			default:
 
-				$this->response(0);
+				$this->response(0, 'Resource not found.');
 		}
 	}
 
@@ -94,7 +95,7 @@ class ColorService {
 		else {
 
 			header('HTTP/1.1 404');
-			$json = array('error'=>'404', 'message'=> $values);
+			$json = array('error'=>'1', 'message'=> $values);
 
 		}
 
@@ -133,12 +134,15 @@ class ColorService {
 
 		try {
 
-			$result = $this->database->query('select * from colors');
+			if ($this->database) {
 
-			while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+				$result = $this->database->query('select * from colors');
 
-				$colors[] = array('id' => $row['id'], 'color' => $row['color']);
+				while($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
+					$colors[] = array('id' => $row['id'], 'color' => $row['color']);
+
+				}
 			}
 
 			if($colors) {
@@ -153,7 +157,7 @@ class ColorService {
 
 		}	
 
-		return $this->response(0);
+		return $this->response(0, 'Something went wrong.');
 	}
 }
 
